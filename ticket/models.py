@@ -2,34 +2,28 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
-class Ticket(models.Model):
-   issue = models.TextField()
-   created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-   created_at = models.DateTimeField(auto_now = True)
-   associated_project  = models.ForeignKey('Project', on_delete=models.CASCADE)
-   status = models.BooleanField()
-
 
 class Project(models.Model):
-   name = models.CharField(max_length = 50)
-   description = models.TextField()
-   devs = models.ManyToManyField(User)
-   image = models.ImageField(upload_to='images')
+    name = models.CharField(max_length=50)
+    description = models.TextField()
+    image = models.ImageField()
 
 
-class ResolvedTicket(models.Model):
-   issue = models.ForeignKey(Ticket, on_delete=models.CASCADE)
-   solution = models.TextField()
-   solved_by = models.ForeignKey(User, on_delete=models.CASCADE)
-   sloved_at = models.DateTimeField(auto_now = True)
+class Ticket(models.Model):
+    description = models.TextField()
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now = True)
+    file = models.FileField()
+    status = models.CharField(max_length = 50)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+
+class ProjectDevs(models.Model):
+    dev = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.ManyToManyField(User, related_name='dev_project')
 
 
 class Log(models.Model):
-   issue = models.ForeignKey('Ticket', on_delete=models.CASCADE)
-   solution = models.ForeignKey('ResolvedTicket', on_delete=models.CASCADE)
-
-
-   
-
-
-
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
+    resolved_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    resolved_at = models.DateTimeField(auto_now = True)

@@ -27,9 +27,9 @@ def CreateUser(request):
 
 def LoginUser(request):
     if request.method == 'POST':
-        request.POST.get('username')
-        request.POST.get('password')
-        # user = authenticate(request, username=username)
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        # user = authenticate(request, username=username, password = password)
 
     return render(request, 'ticket/login.html')
 
