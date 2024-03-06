@@ -1,9 +1,13 @@
 {% extends 'ticket/base.html' %} 
 {% block base %}
-{% block title  %} Home {% endblock %}
+<title>{% block title %}Home{% endblock %}</title>
 <body>
     <div class="container">
-
+    <div class="row">
+        <br>
+        <h2><center>Our Projects</center></h2>
+        <br>
+    </div>
 
     <div class="row">
     {% for project in project_objects %}
@@ -13,7 +17,7 @@
             <div class="card-body">
                 <h5 class="card-title">{{ project.name }}</h5>
                 <p class="card-text">{{ project.description }}</p>
-                <a href="#" class="btn btn-primary">Raise a Ticket</a>
+                <a href="{% url 'details' project.id %}" class="btn btn-primary">Raise a Ticket</a>
             </div>
         </div>
     </div>

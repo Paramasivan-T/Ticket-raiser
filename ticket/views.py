@@ -1,3 +1,5 @@
+import os
+from django.conf import settings
 from django.contrib.auth.models import Group, User
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.forms import UserCreationForm
@@ -73,6 +75,7 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
 
+
 @developer_required
 def developer_dashboard(request):
 
@@ -85,4 +88,28 @@ def admin_dashboard(request):
     
     context = {}
     return render(request, 'ticket/admin_view.html', context)
+
+@login_required(login_url='login/')
+def details(request, id):
+    project_object = Project.objects.get(id=id)
+
+    if request.method == 'POST':
+        description = request.POST.get('description')
+        created_by = request.user
+        file = request.FILES.get('file')
+        if file:
+            # Handle the file as per your requirement
+            # For example, save it to a specific location
+            file_path = os.path.join(settings.MEDIA_ROOT, file.name)
+            with open(file_path, 'wb') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+                    
+        project = project_object.name
+        Ticket.objects.create(description=description, created_by=created_by, file=file, project=project_object)
+
+
+    context = {'project_object': project_object}
+    return render(request, "ticket/details.html", context)
+    
     

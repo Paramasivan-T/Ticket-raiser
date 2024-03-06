@@ -1,0 +1,28 @@
+{% extends 'ticket/base.html' %} 
+{% block base %}
+
+<h1>Details Page</h1>
+
+{{ project_object.name }}
+<br>
+{{ project_object.description }}
+
+<div class="container">
+
+<form action="" method="post">
+    {% csrf_token %}
+
+    <label for="">Ticket</label>
+    <input id="description" name="description" type="text">
+    <br>
+    <label for="myfile">Select a file:</label>
+    <br>
+    <input type="file" id="file" name="file">
+    <br>
+    <input type="submit">
+
+</form>
+
+</div>
+
+{% endblock %}
