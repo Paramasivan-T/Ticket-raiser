@@ -1,14 +1,12 @@
-import os
-from django.conf import settings
 from django.contrib.auth.models import Group, User
 from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from .forms import CreateUserForm
+from .forms import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import *
 from .decoraters import *
+
 
 # Create your views here.
 @login_required(login_url='login/')
@@ -31,6 +29,7 @@ def home(request):
 
     context={'project_objects': project_objects}
     return render(request, 'ticket/home.html',context=context)
+
 
 @unauthenticated_user
 def createUser(request):
@@ -70,6 +69,7 @@ def loginUser(request):
     context={}
     return render(request, 'ticket/login.html',context)
 
+
 @login_required(login_url='login/')
 def logoutUser(request):
     logout(request)
@@ -89,27 +89,23 @@ def admin_dashboard(request):
     context = {}
     return render(request, 'ticket/admin_view.html', context)
 
+
 @login_required(login_url='login/')
 def details(request, id):
     project_object = Project.objects.get(id=id)
-
+    
     if request.method == 'POST':
-        description = request.POST.get('description')
-        created_by = request.user
-        file = request.FILES.get('file')
-        if file:
-            # Handle the file as per your requirement
-            # For example, save it to a specific location
-            file_path = os.path.join(settings.MEDIA_ROOT, file.name)
-            with open(file_path, 'wb') as destination:
-                for chunk in file.chunks():
-                    destination.write(chunk)
-                    
-        project = project_object.name
-        Ticket.objects.create(description=description, created_by=created_by, file=file, project=project_object)
+        form = TickeRaisingForm(request.POST, request.FILES)
+        
+        if form.is_valid():
+            ticket_form = form.save(commit=False)
+            ticket_form.created_by = request.user
+            ticket_form.project = project_object
+            ticket_form.save()
+            messages.success(request, "Ticket Submitted Successfully")
+            # return redirect('home')
+    else:
+        form = TickeRaisingForm()
 
-
-    context = {'project_object': project_object}
+    context = {'project_object': project_object, 'form': form}
     return render(request, "ticket/details.html", context)
-    
-    

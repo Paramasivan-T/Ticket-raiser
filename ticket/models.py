@@ -15,16 +15,14 @@ class Ticket(models.Model):
     CHOICE_ONE = 'In Progress'
     CHOICE_TWO = 'Completed'
     CHOICE_THREE = 'Failed'
-
     YOUR_CHOICES = [
         (CHOICE_ONE, 'Work In Progress'),
         (CHOICE_TWO, 'Ticket Solved Successfully'),
         (CHOICE_THREE, 'Failed to solve'),
     ]
-
     description = models.TextField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now = True)
+    created_at = models.DateTimeField(auto_now_add = True)
     file = models.FileField(upload_to='uploads/')
     status = models.CharField(max_length=100, choices=YOUR_CHOICES, default=CHOICE_ONE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)

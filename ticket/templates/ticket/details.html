@@ -1,6 +1,7 @@
 {% extends 'ticket/base.html' %} 
 {% block base %}
 
+<section>
 <h1>Details Page</h1>
 
 {{ project_object.name }}
@@ -9,20 +10,22 @@
 
 <div class="container">
 
-<form action="" method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-
-    <label for="">Ticket</label>
-    <input id="description" name="description" type="text">
     <br>
-    <label for="myfile">Select a file:</label>
+    {{ form.description }}
     <br>
-    <input type="file" id="file" name="file">
+    {{ form.file}}
     <br>
-    <input type="submit">
+    <!-- <input type="text" name="status" value="{{ form.instance.get_status_display }}" disabled> -->
+    <br>
+    <button type="submit">Submit</button>
+    {% for message in messages %}
+    <p>{{message}}</p>
+    {% endfor %}
 
 </form>
 
-</div>
-
 {% endblock %}
+</section>
+
