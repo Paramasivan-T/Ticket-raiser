@@ -9,7 +9,7 @@ class Project(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
     image = models.ImageField(upload_to='images', default='')
-
+    
 
 class Ticket(models.Model):
     CHOICE_ONE = 'In Progress'
@@ -30,8 +30,9 @@ class Ticket(models.Model):
 
 class ProjectDevs(models.Model):
     dev = models.ForeignKey(User, on_delete=models.CASCADE)
-    project = models.ManyToManyField(User, related_name='dev_project')
+    project = models.ManyToManyField(Project, related_name='dev_project')
 
+    project = models.ForeignKey()
 
 class Log(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)

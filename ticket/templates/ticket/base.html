@@ -226,7 +226,7 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Projects</a>
-          <a class="nav-link" href="#">My Tickets</a>
+          <a class="nav-link" href="{% url 'my_ticket' %}">My Tickets</a>
           <a class="nav-link" href="#">Pricing</a>
           <a class="nav-link " href="{% url 'logout' %}"> {{request.user}} (Logout)</a>
         </div>

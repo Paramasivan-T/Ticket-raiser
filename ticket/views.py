@@ -1,5 +1,6 @@
 from django.contrib.auth.models import Group, User
 from django.shortcuts import get_object_or_404, render, redirect
+from django.views import View
 from .forms import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -90,11 +91,39 @@ def admin_dashboard(request):
     return render(request, 'ticket/admin_view.html', context)
 
 
-@login_required(login_url='login/')
-def details(request, id):
-    project_object = Project.objects.get(id=id)
+# @login_required(login_url='login/')
+# def details(request, id):
+#     ticket_objects = Ticket.objects.all()
+#     project_object = Project.objects.get(id=id)
     
-    if request.method == 'POST':
+#     if request.method == 'POST':
+#         form = TickeRaisingForm(request.POST, request.FILES)
+        
+#         if form.is_valid():
+#             ticket_form = form.save(commit=False)
+#             ticket_form.created_by = request.user
+#             ticket_form.project = project_object
+#             ticket_form.save()
+#             messages.success(request, "Ticket Submitted Successfully")
+#     else:
+#         form = TickeRaisingForm()
+
+#     context = {'project_object': project_object, 'form': form, 'ticket_object':ticket_objects}
+#     return render(request, "ticket/details.html", context)
+
+
+class DetailView(View):
+    def get(self, request, id):
+        ticket_objects = Ticket.objects.all()
+        project_object = Project.objects.get(id=id)
+        form = TickeRaisingForm()
+        context = {'project_object': project_object, 'form': form, 'ticket_object':ticket_objects}
+        return render(request, "ticket/details.html", context)
+
+    def post(self, request, id):
+        ticket_objects = Ticket.objects.all()
+        project_object = Project.objects.get(id=id)
+
         form = TickeRaisingForm(request.POST, request.FILES)
         
         if form.is_valid():
@@ -103,9 +132,14 @@ def details(request, id):
             ticket_form.project = project_object
             ticket_form.save()
             messages.success(request, "Ticket Submitted Successfully")
-            # return redirect('home')
-    else:
-        form = TickeRaisingForm()
+            return redirect('home')
+    
+@login_required(login_url='login/')
+def my_ticket(request):
+    ticket_object = Ticket.objects.all()
 
-    context = {'project_object': project_object, 'form': form}
-    return render(request, "ticket/details.html", context)
+    # for ticket in ticket_object:
+    #     if ticket.
+
+    context = {'ticket_object':ticket_object}
+    return render(request, 'ticket/my_ticket.html', context)

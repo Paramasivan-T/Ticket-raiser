@@ -6,3 +6,4 @@ admin.site.register(Project)
 admin.site.register(Ticket)
 admin.site.register(ProjectDevs)
 admin.site.register(Log)
+ 

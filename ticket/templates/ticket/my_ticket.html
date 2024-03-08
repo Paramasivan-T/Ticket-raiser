@@ -1,0 +1,19 @@
+{% extends 'ticket/base.html' %} 
+{% block base %}
+
+<div class="container">
+
+<h1>MY TICKETS PAGE</h1>
+
+
+{% for ticket in ticket_object %}
+    {% if ticket.created_by == request.user %}
+        {{ ticket.description }}
+        <br>
+    {% endif %}
+{% endfor %}
+
+</div>
+
+
+{% endblock %}
